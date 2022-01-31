@@ -4,9 +4,39 @@ const jws = require('jws')
 const env = process.env.NODE_ENV || 'development'
 const {JWS_SECRET} = require(`../.credentials.${env}`)
 
+/*
+*payload is an object of arbitrary key:value pairs
+*/
+exports.createJWS =  (payload) => {
+  const signature = jws.sign({
+    header: {alg: 'HS256'},
+    payload: payload,
+    secret: JWS_SECRET
+  })
+  return signature
+}
+
+exports.decodeJWS = async (signature) => {
+  if (!signature || signature.length === 0)
+    throw {error: "cannot verify signature of nothing"}
+
+  if (!verifyJWS(signature)) throw {error: "could not verify signature"}
+
+  let dump = jws.decode(signature)
+  return dump.payload
+}
+
 function verifyJWS (signature) {
   console.log('verifyJWS')
   return jws.verify(signature, 'HS256', JWS_SECRET)
+}
+
+exports.validatePassword = (password) => {
+  if(password.length < 8) {
+    return false
+  } else {
+    return password
+  }
 }
 
 
@@ -24,6 +54,15 @@ function randomstringv2(len, an) { // an optional string 'a' alpha or 'n' numeri
   return str
 }
 
+exports.genUserId = async () => {
+  return randomstringv2(30)
+}
+
+exports.genformId = () => {
+  return randomstringv2(22)
+}
+
+
 exports.validateUserEmail = (email) => {
  /*slightly modified version of the official W3C HTML5 email regex:
 *https://html.spec.whatwg.org/multipage/forms.html#valid-e-mail-address
@@ -40,44 +79,4 @@ exports.validateUserEmail = (email) => {
   else {
     return false
   }
-}
-
-exports.validatePassword = (password) => {
-  if(password.length < 8) {
-    return false
-  } else {
-    return password
-  }
-}
-
-
-exports.genUserId = async () => {
-  return randomstringv2(30)
-}
-
-exports.genformId = () => {
-  return randomstringv2(22)
-}
-
-/*
-*payload is an object of arbitrary key:value pairs
-*/
-exports.createJWS =  (payload) => {
-  const signature = jws.sign({
-    header: {alg: 'HS256'},
-    payload: payload,
-    secret: JWS_SECRET
-  })
-  return signature
-}
-
-
-exports.decodeJWS = async (signature) => {
-  if (!signature || signature.length === 0)
-    throw {error: "cannot verify signature of nothing"}
-
-  if (!verifyJWS(signature)) throw {error: "could not verify signature"}
-
-  let dump = jws.decode(signature)
-  return dump.payload
 }
