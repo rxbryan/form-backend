@@ -25,19 +25,16 @@ const formSchema = new Schema({
     default: 'enabled'
   },
   storageUsed: Number,
-  totalSubmits: Number,
+  totalSubmits: {
+    type: Number,
+    default: 0
+  },
   created: {
     type: Date,
     default: new Date()
   }
 })
 
-/*formSchema.pre('validate', async function (next){
-  let id = await utils.genformId()
-  this.formId = id
-  console.log(id)
-  next()
-})*/
 
 formSchema.plugin(uniqueValidator)
 module.exports = mongoose.model('Form', formSchema)

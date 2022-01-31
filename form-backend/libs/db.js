@@ -67,7 +67,7 @@ exports.storeFormData = async (userid, formId, fields, files) => {
       })
     })
   }
-  
+
   var status = formData.save().catch()
   if (status.errors) throw status 
 }
@@ -77,4 +77,19 @@ exports.storeForm = async (fields) => {
  const form = new Form(fields)
  var status = form.save().catch()
  if (status.errors) throw status 
+}
+
+exports.getFormData = async (formId) => {
+  const formData = FormData.find({formId: formId}).catch(err => {
+    console.log(err)
+  })
+
+  if (formData) {
+    return formData
+  } else {
+    error = {
+      message: new Error ('no formdata found in database')
+    }
+  }
+  throw err
 }

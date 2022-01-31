@@ -40,7 +40,7 @@ exports.authenticateFormid = async (req, res, next) => {
     req.redirectSuccess = form.redirectUrl.success
     next()
   } else {
-    res.type('text/plain').status(404).send('not found') //error
+    res.type('text/plain').status(404).send('404 not found') //error
   }
 }
 
