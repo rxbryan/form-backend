@@ -41,7 +41,7 @@ exports.storeUser = async (fields) => {
   if (status.errors) throw status
 }
 
-exports.storeFormData = async (fields, files, userid, formId) => {
+exports.storeFormData = async (userid, formId, fields, files) => {
   const formData = new FormData()
   formData.userId = userid
   formData.formId = formId
@@ -50,22 +50,25 @@ exports.storeFormData = async (fields, files, userid, formId) => {
     formData.fields.push({fieldName: k, value: fields[k]})
   })
 
-  Object.keys(files).forEach( k => {
-    files[k].forEach( (arr) => {
-      if (arr.originalFilename) {
-        form.files.push({
-          fieldName: arr.fieldName,
-          originalFilename: arr.originalFilename,
-          fileSizeInBytes: arr.size,
-          filePath: arr.path,
-          contentType: arr.headers['content-type']
-        })
-      } else {
-        //do nothing
-      }
+  if (files != undefined) {
+    Object.keys(files).forEach( k => {
+      files[k].forEach( (arr) => {
+        if (arr.originalFilename) {
+          formData.files.push({
+            fieldName: arr.fieldName,
+            originalFilename: arr.originalFilename,
+            fileSizeInBytes: arr.size,
+            filePath: arr.path,
+            contentType: arr.headers['content-type']
+          })
+        } else {
+          //do nothing
+        }
+      })
     })
-  })
-  var status = form.save().catch()
+  }
+  
+  var status = formData.save().catch()
   if (status.errors) throw status 
 }
 

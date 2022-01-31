@@ -38,9 +38,15 @@ module.exports = async (req, res, next) => {
           })
     }
 
-    req.formData = await parseForm().then((data) => { return data }).catch(err => {
-      console.log(err) // todo log error
-      res.redirect(303, req.redirectFailure) //to failure page
-    })
+    parseForm().then(formdata => {
+      db.storeFormData(req.userId, req.formId, formdata.fields, formdata.files)
+      .catch(err => {
+        console.log(err) // todo log error
+        res.redirect(303, req.redirectFailure) //to failure page
+      })
+    }).catch(err => {
+        console.log(err) // todo log error
+        res.redirect(303, req.redirectFailure)
+      })
   }
 }

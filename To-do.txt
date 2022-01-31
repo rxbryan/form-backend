@@ -1,0 +1,5 @@
+Features:
+	Database encrytion
+	logging
+	better error reporting and handling
+	
