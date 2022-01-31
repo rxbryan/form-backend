@@ -25,25 +25,21 @@ function randomstringv2(len, an) { // an optional string 'a' alpha or 'n' numeri
 }
 
 exports.validateUserEmail = (email) => {
-  //This regex was adapted from an email validation regex at https://www.regular-expressions.info/index.html
-  /*/^(?=[A-Z0-9][A-Z0-9@._%+-]{5,253}+$)[A-Z0-9._%+-]{1,64}+@(?:(?=[A-Z0-9-]{1,63}+\.)[A-Z0-9]++(?:-[A-Z0-9]++)*+\.){1,8}+[A-Z]{2,63}+$/*/
-  
-  // slightly modified version of the official W3C HTML5 email regex:
-  // https://html.spec.whatwg.org/multipage/forms.html#valid-e-mail-address
-  // adapted from Ethan Brown's Web Development with Node and Express
+ /*slightly modified version of the official W3C HTML5 email regex:
+*https://html.spec.whatwg.org/multipage/forms.html#valid-e-mail-address
+*adapted from Ethan Brown's Web Development with Node and Express
+*/
 
   let VALID_EMAIL_REGEX = new RegExp('^[a-zA-Z0-9.!#$%&\'*+\/=?^_`{|}~-]+@' +
     '[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?' +
     '(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$')
 
   if ((email != undefined) && VALID_EMAIL_REGEX.test(email)) {
-    //sendValidationEmail(email) //to-do 
     return email
   }
   else {
     return false
   }
-
 }
 
 exports.validatePassword = (password) => {
@@ -65,7 +61,6 @@ exports.genformId = () => {
 
 /*
 *payload is an object of arbitrary key:value pairs
-*
 */
 exports.createJWS =  (payload) => {
   const signature = jws.sign({
