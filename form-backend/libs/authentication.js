@@ -14,7 +14,8 @@ exports.getUserIdByEmail =  async (req, res) => {
     console.log(user[0])
     bcrypt.compare(req.body.password, user[0].password).then(() => {
       //req.userId = user.userId
-      let token = utils.createJWS({userId: user.userId, date: new Date().getTime()})
+      console.log(user[0].userId)
+      let token = utils.createJWS({userId: user[0].userId, date: new Date().getTime()})
       res.json({"message": "success", "accessToken": token})
     }).catch( err => {
       console.log(err)

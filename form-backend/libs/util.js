@@ -7,6 +7,7 @@ const env = process.env.NODE_ENV || 'development'
 const {JWS_SECRET} = require(`../.credentials.${env}`)
 
 function verifyJWS (signature) {
+  console.log('verifyJWS')
   return jws.verify(signature, 'HS256', JWS_SECRET)
 }
 
@@ -27,7 +28,7 @@ function randomstringv2(len, an) { // an optional string 'a' alpha or 'n' numeri
 /*
 *const storeDir = pathUtils.join(process.cwd(), 'cache')
 *if (!fs.existsSync(storeDir)) fs.mkdirSync(storeDir)
-*/
+
 exports.storefileLocal = async (path) => {
   const oldPath = pathUtils.resolve(path)
   const newPath = pathUtils.resolve(storeDir, pathUtils.basename(oldPath))
@@ -79,6 +80,7 @@ exports.storefileLocal = async (path) => {
 
   return renamefile().then((path)=>{console.log(path); return path})
 }
+*/
 
 exports.validateUserEmail = (email) => {
   //This regex was adapted from an email validation regex at https://www.regular-expressions.info/index.html
@@ -115,7 +117,7 @@ exports.genUserId = async () => {
   return randomstringv2(30)
 }
 
-exports.genformId = async () => {
+exports.genformId = () => {
   return randomstringv2(22)
 }
 
@@ -137,7 +139,7 @@ exports.decodeJWS = async (signature) => {
   if (!signature || signature.length === 0)
     throw {error: "cannot verify signature of nothing"}
 
-  if (!jws.verify(signature)) throw {error: "could not verify signature"}
+  if (!verifyJWS(signature)) throw {error: "could not verify signature"}
 
   let dump = jws.decode(signature)
   return dump.payload

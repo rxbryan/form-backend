@@ -1,4 +1,5 @@
 const csurf = require('csrf')()
+const db = require('./libs/db')
 
 const env = process.env.NODE_ENV || 'development'
 const {CSRF_SECRET} = require(`./.credentials.${env}`)

@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 const User = require('../models/User')
 const FormData = require('../models/Form-data')
+const Form = require('../models/Form')
 //const utils = require('./util')
 
 const env = process.env.NODE_ENV || 'development' //to-do: remove this later
@@ -66,4 +67,11 @@ exports.storeFormData = async (fields, files, userid, formId) => {
   })
   var status = form.save().catch()
   if (status.errors) throw status 
+}
+
+
+exports.storeForm = async (fields) => {
+ const form = new Form(fields)
+ var status = form.save().catch()
+ if (status.errors) throw status 
 }

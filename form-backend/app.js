@@ -4,7 +4,7 @@ const bodyParser = require('body-parser')
 
 const handlers = require('./handlers')
 const auth = require('./libs/authentication')
-const formHandler = require('./controllers/formHandler')
+const multipart = require('./libs/storeMultipart')
 const registerUser = require('./controllers/registerUser')
 const loginUser = require('./controllers/loginUser')
 const createForm = require('./controllers/createForm')
@@ -18,6 +18,7 @@ app.set('view engine', 'handlebars')
 
 app.use(express.static(__dirname + '/public'))
 app.use(/\/auth\/((login)|(register))/, bodyParser.urlencoded({ extended: true }), bodyParser.json())
+
 
 let port = process.env.PORT
 if (port == null || port == '') {
@@ -41,8 +42,8 @@ app.get('user/forms/:formId', )
 */
 app.post('/auth/register', registerUser )
 app.post('/auth/login',loginUser, auth.getUserIdByEmail)
-app.post('/user/forms', createForm)
-app.post('form/submit/:formId', auth.authenticateFormid, formHandler)
+app.post('/user/forms', bodyParser.json(), createForm)
+app.post('/form/submit/:formId', auth.authenticateFormid, multipart, bodyParser.urlencoded({ extended: true }), bodyParser.json())
 
 /*
 app.get('/user/token', )
