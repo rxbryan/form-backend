@@ -1,5 +1,3 @@
-const fs = require('fs')
-const pathUtils = require('path')
 const bcrypt = require('bcrypt')
 const jws = require('jws')
 
@@ -25,62 +23,6 @@ function randomstringv2(len, an) { // an optional string 'a' alpha or 'n' numeri
   }
   return str
 }
-/*
-*const storeDir = pathUtils.join(process.cwd(), 'cache')
-*if (!fs.existsSync(storeDir)) fs.mkdirSync(storeDir)
-
-exports.storefileLocal = async (path) => {
-  const oldPath = pathUtils.resolve(path)
-  const newPath = pathUtils.resolve(storeDir, pathUtils.basename(oldPath))
-  //debug
-  console.log('oldPath: '+oldPath, '\nnewPath: '+newPath)
-
-  const renamefile = () => {
-    return new Promise ((resolve, reject) => {
-      fs.rename(oldPath, newPath, err => {
-        if(err) {
-          //debug
-          console.log('error occurred in fs.rename')
-          if(err.code === 'EXDEV') {
-            //debug
-            console.log(`error:${err.code} occurred in fs.rename`)
-            copy().then(resolve(newPath)).catch((err)=>{reject (err)})
-          } else {
-            //debug
-            console.log(`error:${err.code} occurred in fs.rename`)
-            reject (err)
-          }
-        }
-        resolve(newPath)   //refactor asap
-      })
-    })
-  }
-
-  const copy = () => {
-    return new Promise ((resolve, reject) => {
-      const readStream = fs.createReadStream(oldPath)
-      const writeStream = fs.createWriteStream(newPath)
-
-      readStream.on('error', () => { throw new Error('readStream error')})
-      writeStream.on('error', () => { throw new Error('writeStream error')})
-
-      readStream.on('close', () => {
-        fs.unlink(oldPath, (err, data) => {
-          if(err) {
-            reject(err)
-          } else {
-            resolve(data)
-          }
-        })
-      })
-
-      readStream.pipe(writeStream)
-    })
-  }
-
-  return renamefile().then((path)=>{console.log(path); return path})
-}
-*/
 
 exports.validateUserEmail = (email) => {
   //This regex was adapted from an email validation regex at https://www.regular-expressions.info/index.html

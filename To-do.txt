@@ -2,4 +2,4 @@ Features:
 	Database encrytion
 	logging
 	better error reporting and handling
-	
+	add support for remote storage eg. S3...
