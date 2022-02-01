@@ -27,7 +27,7 @@ exports.getUserIdByEmail =  async (req, res) => {
 }
 
 exports.authenticateJWS = async (req, res, next) => {
-  let jwt = (req.body) ? req.body.token : req.headers['JWT']
+  let jwt = (req.body) ? req.body.token : req.headers['jwt']
 
   if (jwt) {
     if (!utils.verifyJWS(jwt)) {

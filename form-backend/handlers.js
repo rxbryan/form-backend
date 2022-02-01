@@ -15,6 +15,7 @@ exports.signup = async (req, res) => {
 }
 
 exports.notFound = (req, res) => {
+  console.log(req.headers)
   res.render('404')
 }
 

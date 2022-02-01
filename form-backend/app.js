@@ -10,6 +10,7 @@ const registerUser = require('./controllers/registerUser')
 const loginUser = require('./controllers/loginUser')
 const createForm = require('./controllers/createForm')
 const getForms = require('./controllers/getForms')
+const getFormData = require('./controllers/getFormData')
 
 const app = new express()
 app.engine('handlebars', expressHandlebars({
@@ -34,17 +35,17 @@ app.listen(port, () => {
 //route handling
 app.get('/signup', handlers.signup)
 app.get('/login', handlers.login )
-app.get('/user/forms', bodyParser.json(), auth.authenticateJWS, getForms)
-/*
-app.get('user/forms/:formId', )
+app.get('/user/forms', auth.authenticateJWS, getForms)
+app.get('/user/forms/:formId', auth.authenticateJWS, getFormData)
 
-
-*/
 app.post('/auth/register', registerUser )
 app.post('/auth/login',loginUser, auth.getUserIdByEmail)
 app.post('/user/forms', bodyParser.json(), createForm)
 app.post('/form/submit/:formId', auth.authenticateFormid, multipart, bodyParser.urlencoded({ extended: true }), bodyParser.json(), storeBody)
-
+/*
+app.patch('/user/forms/:formId')
+app.delete('/user/forms/:formId')
+*/
 /*
 app.get('/user/token', )
 app.get('/user/subscriptions', )
@@ -58,11 +59,9 @@ app.post('/user/token', )
 app.post('user/subscriptions', )
 
 app.put('/user')
-app.patch('/user/forms/:formId')
 app.patch('/user', )
 
-app.delete('/user/token')
-app.delete('/user/forms/:formId')*/
+app.delete('/user/token')*/
 //Error notFound
 app.use(handlers.notFound)
 
