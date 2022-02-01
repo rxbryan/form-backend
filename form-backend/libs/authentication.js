@@ -27,7 +27,7 @@ exports.getUserIdByEmail =  async (req, res) => {
 }
 
 exports.authenticateJWS = async (req, res, next) => {
-  var jwt = (req.body) ? req.body.token : req.headers['JWT']
+  let jwt = (req.body) ? req.body.token : req.headers['JWT']
 
   if (jwt) {
     if (!utils.verifyJWS(jwt)) {
@@ -36,6 +36,7 @@ exports.authenticateJWS = async (req, res, next) => {
       }
       res.status('400').json(error)
     }
+    req.JWT = jwt
     next()
   } else {
     let error = {

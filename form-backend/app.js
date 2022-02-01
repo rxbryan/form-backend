@@ -9,6 +9,7 @@ const storeBody = require('./libs/storeBody')
 const registerUser = require('./controllers/registerUser')
 const loginUser = require('./controllers/loginUser')
 const createForm = require('./controllers/createForm')
+const getForms = require('./controllers/getForms')
 
 const app = new express()
 app.engine('handlebars', expressHandlebars({
@@ -33,7 +34,7 @@ app.listen(port, () => {
 //route handling
 app.get('/signup', handlers.signup)
 app.get('/login', handlers.login )
-app.get('/user/forms', bodyParser.json(), auth.authenticateJWS )
+app.get('/user/forms', bodyParser.json(), auth.authenticateJWS, getForms)
 /*
 app.get('user/forms/:formId', )
 

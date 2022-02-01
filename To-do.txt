@@ -3,3 +3,5 @@ Features:
 	logging
 	better error reporting and handling
 	add support for remote storage eg. S3...
+	better implement token authentication
+	use collection+json as hypermedia
