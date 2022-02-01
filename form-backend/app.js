@@ -32,11 +32,9 @@ app.listen(port, () => {
 
 //route handling
 app.get('/signup', handlers.signup)
-
 app.get('/login', handlers.login )
-
+app.get('/user/forms', bodyParser.json(), auth.authenticateJWS )
 /*
-app.get('/user/forms', )
 app.get('user/forms/:formId', )
 
 

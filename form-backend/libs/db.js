@@ -80,16 +80,31 @@ exports.storeForm = async (fields) => {
 }
 
 exports.getFormData = async (formId) => {
-  const formData = FormData.find({formId: formId}).catch(err => {
+  const formData = await FormData.find({formId: formId}).catch(err => {
     console.log(err)
   })
 
   if (formData) {
     return formData
   } else {
-    error = {
+    let error = {
       message: new Error ('no formdata found in database')
     }
+    throw error
   }
-  throw err
+}
+
+exports.getAllForms = async (userId) => {
+  const forms = Form.find({userId: userId}).catch(err => {
+    console.log(err)
+  })
+
+  if (forms) {
+    return forms
+  } else {
+    let error = {
+      message: `no form associated with userId: ${userId} was found`
+    }
+    throw error
+  }
 }

@@ -7,7 +7,15 @@ const {JWS_SECRET} = require(`../.credentials.${env}`)
 /*
 *payload is an object of arbitrary key:value pairs
 */
-exports.createJWS =  (payload) => {
+
+function verifyJWS (signature) {
+  console.log('verifyJWS')
+  return jws.verify(signature, 'HS256', JWS_SECRET)
+}
+
+exports.verifyJWS = verifyJWS
+
+exports.createJWS = (payload) => {
   const signature = jws.sign({
     header: {alg: 'HS256'},
     payload: payload,
@@ -26,11 +34,6 @@ exports.decodeJWS = async (signature) => {
   return dump.payload
 }
 
-function verifyJWS (signature) {
-  console.log('verifyJWS')
-  return jws.verify(signature, 'HS256', JWS_SECRET)
-}
-
 exports.validatePassword = (password) => {
   if(password.length < 8) {
     return false
@@ -38,7 +41,6 @@ exports.validatePassword = (password) => {
     return password
   }
 }
-
 
 function randomstringv2(len, an) { // an optional string 'a' alpha or 'n' numeric
   an = an && an.toLowerCase()

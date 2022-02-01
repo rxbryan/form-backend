@@ -26,8 +26,23 @@ exports.getUserIdByEmail =  async (req, res) => {
   }
 }
 
-exports.authenticateJWT = async (apiToken) => {
-   
+exports.authenticateJWS = async (req, res, next) => {
+  var jwt = (req.body) ? req.body.token : req.headers['JWT']
+
+  if (jwt) {
+    if (!utils.verifyJWS(jwt)) {
+      let error = {
+        message: 'request could not be authenticated'
+      }
+      res.status('400').json(error)
+    }
+    next()
+  } else {
+    let error = {
+      message: 'request does not contain any authencation'
+    }
+    res.status('400').json(error)
+  }
 }
 
 exports.authenticateFormid = async (req, res, next) => {
