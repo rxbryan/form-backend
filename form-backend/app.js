@@ -6,8 +6,6 @@ const handlers = require('./handlers')
 const auth = require('./libs/authentication')
 const multipart = require('./libs/storeMultipart')
 const storeBody = require('./libs/storeBody')
-const registerUser = require('./controllers/registerUser')
-const loginUser = require('./controllers/loginUser')
 const createForm = require('./controllers/createForm')
 const getForms = require('./controllers/getForms')
 const getFormData = require('./controllers/getFormData')
@@ -20,7 +18,6 @@ app.engine('handlebars', expressHandlebars({
 app.set('view engine', 'handlebars')
 
 app.use(express.static(__dirname + '/public'))
-app.use(/\/auth\/((login)|(register))/, bodyParser.urlencoded({ extended: true }), bodyParser.json())
 
 
 let port = process.env.PORT
@@ -33,18 +30,15 @@ app.listen(port, () => {
 })
 
 //route handling
-app.get('/signup', handlers.signup)
-app.get('/login', handlers.login )
-app.get('/user/forms', auth.authenticateJWS, getForms)
-app.get('/user/forms/:formId', auth.authenticateJWS, getFormData)
+app.get('/forms', auth.authenticateJWS, getForms)
+app.get('/forms/:formId', auth.authenticateJWS, getFormData)
 
-app.post('/auth/register', registerUser )
-app.post('/auth/login',loginUser, auth.getUserIdByEmail)
-app.post('/user/forms', bodyParser.json(), createForm)
+app.post('/forms', bodyParser.json(), createForm)
 app.post('/form/submit/:formId', auth.authenticateFormid, multipart, bodyParser.urlencoded({ extended: true }), bodyParser.json(), storeBody)
-/*
-app.patch('/user/forms/:formId')
-app.delete('/user/forms/:formId')
+
+app.patch('/forms/:formId', auth.authenticateJWS, )
+
+/*app.delete('//forms/:formId')
 */
 /*
 app.get('/user/token', )

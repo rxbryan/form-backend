@@ -4,10 +4,6 @@ const utils = require('../libs/util')
 
 const Schema = mongoose.Schema
 const formSchema = new Schema({
-  userId:{
-    type: String,
-    required: [true, 'Form.js: need\'s a user ID']
-  },
   formId: {
     type: String,
     required: [true, 'Form.js: need\'s a form ID'],

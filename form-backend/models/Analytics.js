@@ -8,7 +8,6 @@ const analyticsSchema = new Schema ({
     default: new Date()
   },
   url: String,
-  userid: String,
   token: String,
   formid: String,
   referer: String, //referer address

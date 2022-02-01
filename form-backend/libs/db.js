@@ -1,5 +1,4 @@
 const mongoose = require('mongoose')
-const User = require('../models/User')
 const FormData = require('../models/Form-data')
 const Form = require('../models/Form')
 //const utils = require('./util')
@@ -25,25 +24,8 @@ db.once('open', () => {
   console.log('MongoDB connection established')
 })
 
-exports.storeUser = async (fields) => {
-  let temp = {
-    name: {
-      firstName: fields.firstName,
-      lastName: fields.lastName
-    },
-    email: fields.email,
-    businessName: fields.businessName,
-    password: fields.password
-  }
-
-  const user = new User(temp)
-  var status = await user.save().catch()
-  if (status.errors) throw status
-}
-
-exports.storeFormData = async (userid, formId, fields, files) => {
+exports.storeFormData = async (formId, fields, files) => {
   const formData = new FormData()
-  formData.userId = userid
   formData.formId = formId
 
   Object.keys(fields).forEach( k => {
@@ -79,11 +61,10 @@ exports.storeForm = async (fields) => {
  if (status.errors) throw status 
 }
 
-exports.getUser
-
 exports.getFormData = async (formId) => {
   const formData = await FormData.find({formId: formId}).catch(err => {
     console.log(err)
+    throw err
   })
 
   if (formData) {
@@ -99,14 +80,23 @@ exports.getFormData = async (formId) => {
 exports.getAllForms = async () => {
   const forms = Form.find().catch(err => {
     console.log(err)
+    throw err //TO-DO: improve error handling
   })
 
   if (forms) {
     return forms
   } else {
-    let error = {
-      message: 'There are no forms available'
-    }
-    throw error
+    
   }
+}
+
+exports.updateForm = async (formId, data) => {
+  const form = await Form.findOne({formId: formId}).catch(err => {
+    console.log(err)
+    throw err
+  })
+  if (!form) throw 'Form not found'
+  
+
+
 }

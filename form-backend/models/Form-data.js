@@ -9,10 +9,6 @@ const {STORE_LOCATION} = require(`../.credentials.${env}`)
 const Schema = mongoose.Schema
 
 const formDataSchema = new Schema ({
-  userId: {
-    type: String,
-    required: [true, 'User.js: need\'s a user ID']
-  },
   formId: {
     type: String,
     required: [true, 'User.js: need\'s a user ID']
