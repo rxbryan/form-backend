@@ -9,7 +9,6 @@ const formSchema = new Schema({
     required: [true, 'Form.js: need\'s a form ID'],
     unique: [true, 'Form.js: formId not unique']
   },
-  hostname: [String],
   redirectUrl: {
     success: String,
     failure: String

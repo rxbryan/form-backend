@@ -50,7 +50,7 @@ exports.storeFormData = async (formId, fields, files) => {
     })
   }
 
-  var status = formData.save().catch()
+  var status = await formData.save().catch()
   if (status.errors) throw status 
 }
 
@@ -71,7 +71,7 @@ exports.getFormData = async (formId) => {
     return formData
   } else {
     let error = {
-      message: new Error ('no formdata found in database')
+      message: 'no formdata found in database'
     }
     throw error
   }
@@ -86,7 +86,7 @@ exports.getAllForms = async () => {
   if (forms) {
     return forms
   } else {
-    
+    throw {error: 'No forms found in database'}
   }
 }
 
@@ -95,8 +95,18 @@ exports.updateForm = async (formId, data) => {
     console.log(err)
     throw err
   })
-  if (!form) throw 'Form not found'
   
+  if (!form) throw 'Form not found'
 
-
+  Object.keys(data).forEach(key => {
+    if (key === 'redirectSuccess') {
+      form.redirectUrl.success = data[key]
+    } else if (key === 'redirectFailure') {
+      form.redirectUrl.failure = data[key]
+    } else {
+    form[key] = data[key]
+    }
+  })
+  let status = await form.save().catch()
+  if (status.errors) throw status
 }

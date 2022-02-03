@@ -39,7 +39,7 @@ module.exports = async (req, res, next) => {
     }
 
     parseForm().then(formdata => {
-      db.storeFormData(req.userId, req.formId, formdata.fields, formdata.files)
+      db.storeFormData(req.formId, formdata.fields, formdata.files)
       .then(() => {
         res.status('204').redirect(req.redirectSuccess)
       }).catch(err => {

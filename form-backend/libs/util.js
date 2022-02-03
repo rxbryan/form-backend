@@ -1,4 +1,3 @@
-const bcrypt = require('bcrypt')
 const jws = require('jws')
 
 const env = process.env.NODE_ENV || 'development'
@@ -7,7 +6,6 @@ const {JWS_SECRET} = require(`../.credentials.${env}`)
 /*
 *payload is an object of arbitrary key:value pairs
 */
-
 function verifyJWS (signature) {
   console.log('verifyJWS')
   return jws.verify(signature, 'HS256', JWS_SECRET)

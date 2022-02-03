@@ -5,3 +5,4 @@ Features:
 	add support for remote storage eg. S3...
 	better implement token authentication
 	use collection+json as hypermedia
+	implement statistics for form submits

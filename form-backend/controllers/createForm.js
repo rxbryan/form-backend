@@ -13,8 +13,7 @@ module.exports = (req, res, next) => {
 		req.currentUser = Object.create(null)
 		let form = Object.create(null)
 		let parsed = JSON.parse(payload)
-		//TO-DO: authenticate userId
-		form.userId = parsed.userId
+		
 		if (!req.body.redirectFailure) {
 			throw {error: 'There is no redirect url for failed submission' }
 		} else {
