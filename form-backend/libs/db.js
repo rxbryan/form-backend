@@ -24,6 +24,8 @@ db.once('open', () => {
   console.log('MongoDB connection established')
 })
 
+exports.deleteFormData = deleteFormData
+
 exports.storeFormData = async (formId, fields, files) => {
   const formData = new FormData()
   formData.formId = formId
@@ -57,14 +59,14 @@ exports.storeFormData = async (formId, fields, files) => {
 
 exports.storeForm = async (fields) => {
  const form = new Form(fields)
- var status = form.save().catch()
+ var status = await form.save().catch()
  if (status.errors) throw status 
 }
 
 exports.getFormData = async (formId) => {
   const formData = await FormData.find({formId: formId}).catch(err => {
     console.log(err)
-    throw err
+    //throw err
   })
 
   if (formData) {
@@ -80,7 +82,7 @@ exports.getFormData = async (formId) => {
 exports.getAllForms = async () => {
   const forms = Form.find().catch(err => {
     console.log(err)
-    throw err //TO-DO: improve error handling
+    //throw err //TO-DO: improve error handling
   })
 
   if (forms) {
@@ -93,7 +95,7 @@ exports.getAllForms = async () => {
 exports.updateForm = async (formId, data) => {
   const form = await Form.findOne({formId: formId}).catch(err => {
     console.log(err)
-    throw err
+    //throw err
   })
   
   if (!form) throw 'Form not found'
@@ -109,4 +111,40 @@ exports.updateForm = async (formId, data) => {
   })
   let status = await form.save().catch()
   if (status.errors) throw status
+}
+
+async function deleteFormData(formId, from, to) {
+  console.log('deleteFormData')
+  const formData = await FormData.find({formId: formId}).catch(err => {
+    console.log(err)
+    //throw err
+  })
+  console.log(formData)
+  if (formData.length === 0) throw 'FormData not found'
+
+  let startdate = (from) ? new Date(from).getTime() : 0
+  let enddate = (to) ? new Date(to).getTime() : new Date().getTime()
+  console.log('startdate: '+startdate+'\n'+'enddate: '+ enddate)
+
+  let count = 0
+  for (let i in formData) {
+    if ((formData[i].dateSubmitted.getTime() >= startdate) && (formData[i].dateSubmitted.getTime() <= enddate)) {
+      await formData[i].remove().catch(err => {
+        console.log(err)
+      })//handle error
+      count++
+    }
+  }
+  return count
+}
+
+exports.deleteForm = async (formId) => {
+  let ret = await deleteFormData(formId).catch(err => {
+    console.log(err)
+  })
+
+  //if (ret) throw 'an error occurred while deleting forms'
+  await Form.deleteOne({formId: formId}).catch(err => {
+    console.log
+  })// error checking
 }

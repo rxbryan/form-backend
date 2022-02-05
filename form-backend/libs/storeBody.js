@@ -1,8 +1,9 @@
 const db = require('./db')
 
 module.exports = (req, res, next) => {
-  console.log(req.headers)
-  console.log(req.body)
+  if (!req.form.status) {
+    return res.status('400').json({error: `form: ${req.form.formId} is disabled`})
+  }
   db.storeFormData(req.formId, req.body).then(() => {
     res.status('204').redirect(req.redirectSuccess)
   }).catch((err) => {

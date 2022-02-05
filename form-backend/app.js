@@ -10,6 +10,8 @@ const createForm = require('./controllers/createForm')
 const getForms = require('./controllers/getForms')
 const getFormData = require('./controllers/getFormData')
 const updateForm = require('./controllers/updateForm')
+const deleteFormData = require('./controllers/deleteFormData')
+const deleteForms = require('./controllers/deleteForms')
 
 const app = new express()
 
@@ -35,7 +37,11 @@ app.post('/form/submit/:formId', auth.authenticateFormid, multipart,
 app.patch('/forms/:formId', auth.authenticateFormid, bodyParser.urlencoded({ extended: true }),
  bodyParser.json(), auth.authenticateJWS, updateForm)
 
-/*app.delete('//forms/:formId')
+app.delete('/forms/:formId', auth.authenticateJWS, auth.authenticateFormid, deleteFormData)
+
+app.delete('/forms', auth.authenticateJWS, auth.authenticateFormid, deleteForms)
+
+/*
 app.get('/about', handlers.about)
 */
 

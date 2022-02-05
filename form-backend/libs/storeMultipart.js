@@ -10,12 +10,15 @@ const storeDir = pathUtils.join(process.cwd(), 'uploads')
 if (!fs.existsSync(storeDir)) fs.mkdirSync(storeDir)
 
 module.exports = async (req, res, next) => {
+  if (!req.form.fileUpload && /\bmultipart\/form-data/.test(req.headers['content-type'])) {
+    return res.status('400')
+    .json({error: 'fileUpload set to false and content-type set to multipart/Form-data'})
+  }
   if (!/\bmultipart\/form-data/.test(req.headers['content-type'])){ 
     next()
   } else {
     let options = (STORE_LOCATION === 'S3') ? {} : {uploadDir: storeDir}
     let form = new multiparty.Form(options)
-    console.log(req.headers)
     form.on('error', err => {
       //console.log('error parsing form ' + err.stack)
       //throw err

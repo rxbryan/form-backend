@@ -23,18 +23,22 @@ exports.authenticateJWS = async (req, res, next) => {
 }
 
 exports.authenticateFormid = async (req, res, next) => {
-  let formId = req.params.formId
-  let form = await Form.findOne({'formId': req.params.formId}).catch(err => {res.redirect('/404')})
+  let formId = req.params.formId || req.query.formId
+  let form = await Form.findOne({'formId': formId}).catch(err => {res.redirect('/404')})
   if(form) {
+    req.form = {
+      formId: form.formId,
+      status: form.status,
+      fileUpload: form.fileUpload,
+      redirectFailure: form.redirectUrl.failure,
+      redirectSuccess: form.redirectUrl.success
+    }
     req.formId = form.formId
     req.redirectFailure = form.redirectUrl.failure
     req.redirectSuccess = form.redirectUrl.success
+
     next()
   } else {
-    res.type('text/plain').status(404).send('404 not found') //error
+    return res.type('text/plain').status(404).send('404 not found') //error
   }
-}
-
-exports.authenticateUserId = async (req, res, next) => {
-  
 }
