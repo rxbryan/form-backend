@@ -1,7 +1,14 @@
 const jws = require('jws')
 
 const env = process.env.NODE_ENV || 'development'
-const {JWS_SECRET} = require(`../.credentials.${env}`)
+
+
+try {
+  var JWS_SECRET = process.env.JWS_SECRET || require(`../.credentials.${env}`).JWS_SECRET
+} catch (err) {
+  console.error('JWS_SECRET not defined')
+  process.exit(1)
+}
 
 /*
 *payload is an object of arbitrary key:value pairs

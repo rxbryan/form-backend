@@ -2,12 +2,12 @@ const db = require('./libs/db')
 
 exports.notFound = (req, res) => {
   console.log(req.headers)
-  res.status('404').send('404 not found')
+  res.status('404').json({message: '404 not found'})
 }
 
 /* eslint-disable no-unused-vars */
 exports.serverError = (err, req, res, next) => {
   console.error(err.message)
-  res.status('500').send('server error')
+  res.status('500').json({message: 'server error'})
 }
 /* eslint-enable no-unused-vars */

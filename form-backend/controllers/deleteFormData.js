@@ -1,7 +1,6 @@
 const db = require('../libs/db')
 
 module.exports = (req, res, next) => {
-	console.log('you fucked up')
 	let DATE_REGEX = /^\d{4}-\d{1,2}-\d{1,2}$/
 	if (!req.query.from)	{
 		return res.status('400').json({error: "'from' query parameter need's to be set"})

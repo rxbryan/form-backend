@@ -7,9 +7,7 @@ module.exports = (req, res, next) => {
 	if (!req.body) {
 		return res.status('400').json({error: "request body empty"})
 	}
-	console.log(req.body)
 	utils.decodeJWS(req.body.token).then(payload => {
-		console.log(payload)
 		req.currentUser = Object.create(null)
 		let form = Object.create(null)
 		let parsed = JSON.parse(payload)
@@ -43,10 +41,8 @@ module.exports = (req, res, next) => {
 			success: req.body.redirectFailure,
 			failure: req.body.redirectSuccess
 		}
-		console.log(form)
 
 		db.storeForm(form).then(() => {
-			console.log('stored form')
 			res.status('201').json({
 				formId: form.formId,
 				action: `Your hostname/form/submit/${form.formId}`

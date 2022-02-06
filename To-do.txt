@@ -6,3 +6,5 @@ Features:
 	better implement token authentication
 	use collection+json as hypermedia
 	implement statistics for form submits
+	add pagination and filter support to get forms/formData enpoints
+	add support for removing files on formData deletions

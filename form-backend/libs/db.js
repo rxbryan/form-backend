@@ -5,14 +5,19 @@ const Form = require('../models/Form')
 
 const env = process.env.NODE_ENV || 'development' //to-do: remove this later
 
-const {mongodb} = require(`../.credentials.${env}`)
-console.log(mongodb.connectionString)
-if (!mongodb.connectionString){
+try {
+  var connectionString = process.env.MONGODB_CONNECT || require(`../.credentials.${env}`).mongodb.connectionString
+} catch (err) {
   console.error('MongoDB connection string missing')
   process.exit(1)
 }
 
-mongoose.connect(mongodb.connectionString, {useNewUrlParser: true})
+if (!connectionString){
+  console.error('MongoDB connection string missing')
+  process.exit(1)
+}
+
+mongoose.connect(connectionString, {useNewUrlParser: true})
 const db = mongoose.connection 
 
 db.on('error', err => {
@@ -114,17 +119,14 @@ exports.updateForm = async (formId, data) => {
 }
 
 async function deleteFormData(formId, from, to) {
-  console.log('deleteFormData')
   const formData = await FormData.find({formId: formId}).catch(err => {
     console.log(err)
     //throw err
-  })
-  console.log(formData)
+  }) 
   if (formData.length === 0) throw 'FormData not found'
 
   let startdate = (from) ? new Date(from).getTime() : 0
   let enddate = (to) ? new Date(to).getTime() : new Date().getTime()
-  console.log('startdate: '+startdate+'\n'+'enddate: '+ enddate)
 
   let count = 0
   for (let i in formData) {
@@ -145,6 +147,6 @@ exports.deleteForm = async (formId) => {
 
   //if (ret) throw 'an error occurred while deleting forms'
   await Form.deleteOne({formId: formId}).catch(err => {
-    console.log
+    console.log(err)
   })// error checking
 }
