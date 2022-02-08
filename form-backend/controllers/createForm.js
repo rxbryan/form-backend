@@ -1,27 +1,25 @@
 const utils = require('../libs/util')
 const db = require('../libs/db')
+const apiError = require('../libs/error')
 
-
-// TO-DO robust error reporting
 module.exports = (req, res, next) => {
-	if (!req.body) {
-		return res.status('400').json({error: "request body empty"})
-	}
-	utils.decodeJWS(req.body.token).then(payload => {
-		req.currentUser = Object.create(null)
-		let form = Object.create(null)
-		let parsed = JSON.parse(payload)
-		
-		if (!req.body.redirectFailure) {
-			throw {error: 'There is no redirect url for failed submission' }
-		} else {
-			//check if string is a url
-		}
+const requestError = new apiError()
 
+	if (!(Object.keys(req.body).length > 0)) {
+		return res.status('400').json(requestError.requestBodyError())
+	}
+
+	utils.decodeJWS(req.JWT).then(payload => {
+		let form = {}
+
+		if (!req.body.redirectFailure) {
+			requestError.errorDetails({message: 'redirectFailure undefined', target: 'invalidEntityBodyParamter'})
+		}
 		if (!req.body.redirectSuccess) {
-			throw {error: 'Unable to create form without redirect url for successful submission'}
-		} else {
-			//TO-DO check if string is a url
+			requestError.errorDetails({message: 'redirectSuccess undefined', target: 'invalidEntityBodyParamter'})
+		}
+		if (requestError.errors() > 0) {
+			return res.status('400').json(requestError.invalidBodyError())
 		}
 
 		if (req.body.fileUpload === true)	{
@@ -48,10 +46,12 @@ module.exports = (req, res, next) => {
 				action: `Your hostname/form/submit/${form.formId}`
 			})
 		}).catch(error => {
-				res.status('200').json({error: 'form some reason we '+
-					'were unable to create your form. Please try again'})
+				res.status('200').json(requestError.dbError(
+					{status: 500, message: error['message'] || 'an error occurred in db#storeForm'}))
 			})
 	}).catch(error => {
-		res.status('400').json(error)
+		res.status('400').json(
+			requestError.errorDetails({message: error.message, target: 'decodeJWS'}).authenticationError())
 	})
+	
 }

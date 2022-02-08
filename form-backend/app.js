@@ -30,7 +30,7 @@ app.use(cors())
 app.get('/forms', auth.authenticateJWS, getForms)
 app.get('/forms/:formId', auth.authenticateJWS, getFormData)
 
-app.post('/forms', bodyParser.json(), createForm)
+app.post('/forms', bodyParser.json(), auth.authenticateJWS, createForm)
 app.post('/form/submit/:formId', auth.authenticateFormid, multipart, 
   bodyParser.urlencoded({ extended: true }), bodyParser.json(), storeBody)
 

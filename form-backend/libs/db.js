@@ -68,20 +68,31 @@ exports.storeForm = async (fields) => {
  if (status.errors) throw status 
 }
 
-exports.getFormData = async (formId) => {
-  const formData = await FormData.find({formId: formId}).catch(err => {
+exports.getFormData = async (query) => {
+  const formData = await FormData.find({formId: query.formId}).catch(err => {
     console.log(err)
-    //throw err
+    return err
   })
+  if (formData.message) throw formData
+  if ((formData.length/query.limit) < query.page) throw {message: 'page parameter too big'}
 
-  if (formData) {
-    return formData
-  } else {
-    let error = {
-      message: 'no formdata found in database'
+  let data = []
+  const startPos = (query.page--) * query.limit
+  let matches = 0
+  //debug
+  console.log('query: ' + query)
+  console.log('startPos: ' + startPos)
+
+  for (let k in formData) {
+    if ((formData[k].dateSubmitted.getTime() > query.from.getTime()) &&
+     (formData[k].dateSubmitted < query.to.getTime())) {
+      matches++
+      if (matches > startPos) data.push(formData[k])
+      if (data.length === query.limit) break
     }
-    throw error
   }
+  console.log('matches: ' + matches)
+  return data
 }
 
 exports.getAllForms = async () => {
@@ -121,9 +132,8 @@ exports.updateForm = async (formId, data) => {
 async function deleteFormData(formId, from, to) {
   const formData = await FormData.find({formId: formId}).catch(err => {
     console.log(err)
-    //throw err
   }) 
-  if (formData.length === 0) throw 'FormData not found'
+  if (formData.length === 0) throw {message: 'FormData not found'}
 
   let startdate = (from) ? new Date(from).getTime() : 0
   let enddate = (to) ? new Date(to).getTime() : new Date().getTime()
@@ -143,9 +153,8 @@ async function deleteFormData(formId, from, to) {
 exports.deleteForm = async (formId) => {
   let ret = await deleteFormData(formId).catch(err => {
     console.log(err)
-  })
-
-  //if (ret) throw 'an error occurred while deleting forms'
+    return err
+  }) 
   await Form.deleteOne({formId: formId}).catch(err => {
     console.log(err)
   })// error checking

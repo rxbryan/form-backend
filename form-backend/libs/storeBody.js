@@ -1,7 +1,7 @@
 const db = require('./db')
 
 module.exports = (req, res, next) => {
-  if (!req.form.status) {
+  if (req.form.status === 'disabled') {
     return res.status('400').json({error: `form: ${req.form.formId} is disabled`})
   }
   db.storeFormData(req.formId, req.body).then(() => {

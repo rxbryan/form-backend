@@ -18,7 +18,7 @@ accepts the query parameters:
 - from: start date in the format `yyyy-mm-dd`
 - to: defaults to current time.
 - page: defaults to 1
-- limit: number of items returned per page. defaults to 50
+- limit: number of items returned per page. default = 10, max = 100 
 
 ```
 POST /forms

@@ -14,7 +14,6 @@ try {
 *payload is an object of arbitrary key:value pairs
 */
 function verifyJWS (signature) {
-  console.log('verifyJWS')
   return jws.verify(signature, 'HS256', JWS_SECRET)
 }
 
@@ -30,21 +29,14 @@ exports.createJWS = (payload) => {
 }
 
 exports.decodeJWS = async (signature) => {
+  console.log('signature: '+ signature)
   if (!signature || signature.length === 0)
-    throw {error: "cannot verify signature of nothing"}
+    throw {message: "JWS: cannot verify signature of nothing"}
 
-  if (!verifyJWS(signature)) throw {error: "could not verify signature"}
+  if (!verifyJWS(signature)) throw {message: "JWS signature could not be verified"}
 
   let dump = jws.decode(signature)
   return dump.payload
-}
-
-exports.validatePassword = (password) => {
-  if(password.length < 8) {
-    return false
-  } else {
-    return password
-  }
 }
 
 function randomstringv2(len, an) { // an optional string 'a' alpha or 'n' numeric
@@ -61,29 +53,6 @@ function randomstringv2(len, an) { // an optional string 'a' alpha or 'n' numeri
   return str
 }
 
-exports.genUserId = async () => {
-  return randomstringv2(30)
-}
-
 exports.genformId = () => {
   return randomstringv2(22)
-}
-
-
-exports.validateUserEmail = (email) => {
- /*slightly modified version of the official W3C HTML5 email regex:
-*https://html.spec.whatwg.org/multipage/forms.html#valid-e-mail-address
-*adapted from Ethan Brown's Web Development with Node and Express
-*/
-
-  let VALID_EMAIL_REGEX = new RegExp('^[a-zA-Z0-9.!#$%&\'*+\/=?^_`{|}~-]+@' +
-    '[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?' +
-    '(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$')
-
-  if ((email != undefined) && VALID_EMAIL_REGEX.test(email)) {
-    return email
-  }
-  else {
-    return false
-  }
 }
