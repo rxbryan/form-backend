@@ -74,14 +74,11 @@ exports.getFormData = async (query) => {
     return err
   })
   if (formData.message) throw formData
-  if ((formData.length/query.limit) < query.page) throw {message: 'page parameter too big'}
+  if ((query.limit *(query.page-1)) > formData.length) throw {message: 'page parameter too big'}
 
   let data = []
-  const startPos = (query.page--) * query.limit
+  const startPos = (query.page-1) * query.limit
   let matches = 0
-  //debug
-  console.log('query: ' + query)
-  console.log('startPos: ' + startPos)
 
   for (let k in formData) {
     if ((formData[k].dateSubmitted.getTime() > query.from.getTime()) &&
@@ -91,21 +88,31 @@ exports.getFormData = async (query) => {
       if (data.length === query.limit) break
     }
   }
-  console.log('matches: ' + matches)
   return data
 }
 
-exports.getAllForms = async () => {
-  const forms = Form.find().catch(err => {
+exports.getAllForms = async (query) => {
+  const forms = await Form.find().catch(err => {
     console.log(err)
-    //throw err //TO-DO: improve error handling
+    return err
   })
 
-  if (forms) {
-    return forms
-  } else {
-    throw {error: 'No forms found in database'}
+  if (forms.message) throw forms
+  if ((query.limit *(query.page-1)) > forms.length) throw {message: 'page parameter too big'}
+
+  let data = []
+  const startPos = (query.page-1) * query.limit
+  let matches = 0
+
+  for (let k in forms) {
+    if ((forms[k].created.getTime() > query.from.getTime()) &&
+     (forms[k].created < query.to.getTime())) {
+      matches++
+      if (matches > startPos) data.push(forms[k].formId)
+      if (data.length === query.limit) break
+    }
   }
+  return data
 }
 
 exports.updateForm = async (formId, data) => {

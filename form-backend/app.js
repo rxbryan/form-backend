@@ -4,6 +4,7 @@ const cors = require('cors')
 
 const handlers = require('./handlers')
 const auth = require('./libs/authentication')
+const parseQuery = require('./libs/parseQuery')
 const multipart = require('./libs/storeMultipart')
 const storeBody = require('./libs/storeBody')
 const createForm = require('./controllers/createForm')
@@ -27,8 +28,8 @@ app.listen(port, () => {
 app.use(cors())
 
 //route handling
-app.get('/forms', auth.authenticateJWS, getForms)
-app.get('/forms/:formId', auth.authenticateJWS, getFormData)
+app.get('/forms', auth.authenticateJWS, parseQuery, getForms)
+app.get('/forms/:formId', auth.authenticateFormid, auth.authenticateJWS, parseQuery, getFormData)
 
 app.post('/forms', bodyParser.json(), auth.authenticateJWS, createForm)
 app.post('/form/submit/:formId', auth.authenticateFormid, multipart, 

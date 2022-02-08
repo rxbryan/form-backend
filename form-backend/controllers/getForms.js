@@ -1,13 +1,11 @@
 const db = require('../libs/db')
+const apiError = require('../libs/error')
 
 module.exports = async (req, res, next) => {
-  let forms = await db.getAllForms().then(forms => {
-    let data = []
-    for (let form of forms) {
-      data.push(form.formId)
-    }
+  const createError = new apiError()
+  await db.getAllForms(req.dbQuery).then(data => {
     res.status('200').json({forms: data})
   }).catch(err => {
-    res.status('200').json(err)
+    res.status('200').json(createError.dbError({message: err.message || 'an error occurred in db.getAllForms'}))
   })
 }

@@ -23,7 +23,6 @@ exports.authenticateJWS = async (req, res, next) => {
 
 exports.authenticateFormid = async (req, res, next) => {
   let formId = req.params.formId || req.query.formId
-  console.log(req.query.formId)
   let form = await Form.findOne({'formId': formId}).catch(err => {res.redirect('/404')})
   if(form) {
     req.form = {
