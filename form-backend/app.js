@@ -24,7 +24,8 @@ app.listen(port, () => {
   console.log('App listening on port 8459')
   console.log(process.cwd())
 })
-
+//disable 'x-powered-by header'
+app.disable('x-powered-by')
 app.use(cors())
 
 //route handling
