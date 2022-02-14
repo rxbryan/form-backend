@@ -31,9 +31,9 @@ exports.createJWS = (payload) => {
 exports.decodeJWS = async (signature) => {
   console.log('signature: '+ signature)
   if (!signature || signature.length === 0)
-    throw {message: "JWS: cannot verify signature of nothing"}
+    throw {message: 'JWS: cannot verify signature of nothing'}
 
-  if (!verifyJWS(signature)) throw {message: "JWS signature could not be verified"}
+  if (!verifyJWS(signature)) throw {message: 'JWS signature could not be verified'}
 
   let dump = jws.decode(signature)
   return dump.payload

@@ -12,7 +12,7 @@ if (!fs.existsSync(storeDir)) fs.mkdirSync(storeDir)
 module.exports = async (req, res, next) => {
   if (!req.form.fileUpload && /\bmultipart\/form-data/.test(req.headers['content-type'])) {
     return res.status('400')
-    .json({error: 'fileUpload set to false and content-type set to multipart/Form-data'})
+      .json({error: 'fileUpload set to false and content-type set to multipart/Form-data'})
   }
   if (!/\bmultipart\/form-data/.test(req.headers['content-type'])){ 
     next()
@@ -30,28 +30,28 @@ module.exports = async (req, res, next) => {
 
     const parseForm = () => {
       return new Promise((resolve, reject) => {
-            form.parse(req, (err, fields, files) => {
-              if (err) {
-                reject (err)
-              }
-              else {
-                resolve ({fields: fields, files: files})
-              }
-            })
-          })
+        form.parse(req, (err, fields, files) => {
+          if (err) {
+            reject (err)
+          }
+          else {
+            resolve ({fields: fields, files: files})
+          }
+        })
+      })
     }
 
     parseForm().then(formdata => {
       db.storeFormData(req.formId, formdata.fields, formdata.files)
-      .then(() => {
-        res.status('204').redirect(req.redirectSuccess)
-      }).catch(err => {
-        console.log(err) // todo log error
-        res.redirect(303, req.redirectFailure) //to failure page
-      })
+        .then(() => {
+          res.status('204').redirect(req.redirectSuccess)
+        }).catch(err => {
+          console.log(err) // todo log error
+          res.redirect(303, req.redirectFailure) //to failure page
+        })
     }).catch(err => {
-        console.log(err) // todo log error
-        res.redirect(303, req.redirectFailure)
-      })
+      console.log(err) // todo log error
+      res.redirect(303, req.redirectFailure)
+    })
   }
 }

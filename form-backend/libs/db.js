@@ -63,9 +63,9 @@ exports.storeFormData = async (formId, fields, files) => {
 
 
 exports.storeForm = async (fields) => {
- const form = new Form(fields)
- var status = await form.save().catch()
- if (status.errors) throw status 
+  const form = new Form(fields)
+  var status = await form.save().catch()
+  if (status.errors) throw status 
 }
 
 exports.getFormData = async (query) => {
@@ -129,7 +129,7 @@ exports.updateForm = async (formId, data) => {
     } else if (key === 'redirectFailure') {
       form.redirectUrl.failure = data[key]
     } else {
-    form[key] = data[key]
+      form[key] = data[key]
     }
   })
   let status = await form.save().catch()

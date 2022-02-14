@@ -1,4 +1,5 @@
-const express = require('express');
+'using strict'
+const express = require('express')
 const bodyParser = require('body-parser')
 const cors = require('cors')
 
@@ -37,7 +38,7 @@ app.post('/form/submit/:formId', auth.authenticateFormid, multipart,
   bodyParser.urlencoded({ extended: true }), bodyParser.json(), storeBody)
 
 app.patch('/forms/:formId', auth.authenticateFormid, bodyParser.urlencoded({ extended: true }),
- bodyParser.json(), auth.authenticateJWS, updateForm)
+  bodyParser.json(), auth.authenticateJWS, updateForm)
 
 app.delete('/forms/:formId', auth.authenticateJWS, auth.authenticateFormid, deleteFormData)
 

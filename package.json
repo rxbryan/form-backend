@@ -4,9 +4,9 @@
   "description": "",
   "main": "form-backend/app.js",
   "scripts": {
-    "test": "jest",
-    "start": "form-backend/app.js",
-    "lint": "eslint --fix app.js handlers.js models libs __test__"
+    "test": "form-backend/node_modules/jest/bin/jest.js",
+    "start": "node form-backend/app.js",
+    "lint": "form-backend/node_modules/eslint/bin/eslint.js --fix form-backend/app.js form-backend/handlers.js form-backend/models form-backend/libs"
   },
   "author": "Bryan Elee",
   "license": "MIT",

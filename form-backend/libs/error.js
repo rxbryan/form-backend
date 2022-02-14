@@ -14,24 +14,24 @@ function ApiError (options) {
 function errorCode (status) {
   let code 
   switch(status) {
-    case 400:
-      code = 'BadRequest'
-      break
-    case 401:
-      code = 'Unauthorized'
-      break
-    case 403:
-      code = 'Forbidden'
-      break
-    case 404:
-      code = 'NotFound'
-      break
-    case 500:
-      code = 'InternalServerError'
-      break
-    default:
-      code = null
-      break
+  case 400:
+    code = 'BadRequest'
+    break
+  case 401:
+    code = 'Unauthorized'
+    break
+  case 403:
+    code = 'Forbidden'
+    break
+  case 404:
+    code = 'NotFound'
+    break
+  case 500:
+    code = 'InternalServerError'
+    break
+  default:
+    code = null
+    break
   }
   return code
 }
