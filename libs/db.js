@@ -6,7 +6,7 @@ const Form = require('../models/Form')
 const env = process.env.NODE_ENV || 'development' //to-do: remove this later
 
 try {
-  var connectionString = process.env.MONGODB_CONNECT || require(`../.credentials.${env}`).mongodb.connectionString
+  var connectionString = process.env.MONGODB_CONNECT //|| require(`../.credentials.${env}`).mongodb.connectionString
 } catch (err) {
   console.error('MongoDB connection string missing')
   process.exit(1)
