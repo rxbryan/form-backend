@@ -5,7 +5,7 @@
   "main": "form-backend/app.js",
   "scripts": {
     "test": "jest",
-    "start": "app.js",
+    "start": "form-backend/app.js",
     "lint": "eslint --fix app.js handlers.js models libs __test__"
   },
   "author": "Bryan Elee",
