@@ -10,6 +10,9 @@
   },
   "author": "Bryan Elee",
   "license": "MIT",
+  "engines": {
+    "node": "v14.17.5"
+  },
   "dependencies": {
     "body-parser": "^1.19.1",
     "cors": "^2.8.5",
