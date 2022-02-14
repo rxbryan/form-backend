@@ -2,7 +2,7 @@
   "name": "form-backend",
   "version": "0.0.1",
   "description": "",
-  "main": "app.js",
+  "main": "form-backend/app.js",
   "scripts": {
     "test": "jest",
     "start": "app.js",
