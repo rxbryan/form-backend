@@ -1,6 +1,6 @@
 const jws = require('jws')
 
-const env = process.env.NODE_ENV || 'development'
+//const env = process.env.NODE_ENV || 'development'
 
 
 try {
