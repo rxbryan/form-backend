@@ -2,11 +2,11 @@
   "name": "form-backend",
   "version": "0.0.1",
   "description": "",
-  "main": "form-backend/app.js",
+  "main": "app.js",
   "scripts": {
-    "test": "form-backend/node_modules/jest/bin/jest.js",
-    "start": "node form-backend/app.js",
-    "lint": "form-backend/node_modules/eslint/bin/eslint.js --fix form-backend/app.js form-backend/handlers.js form-backend/models form-backend/libs"
+    "test": "jest",
+    "start": "node app.js",
+    "lint": "eslint --fix app.js handlers.js models libs"
   },
   "author": "Bryan Elee",
   "license": "MIT",
