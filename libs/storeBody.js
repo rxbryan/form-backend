@@ -5,9 +5,9 @@ module.exports = (req, res, next) => {
     return res.status('400').json({error: `form: ${req.form.formId} is disabled`})
   }
   db.storeFormData(req.formId, req.body).then(() => {
-    res.status('204').redirect(req.redirectSuccess)
+    return res.status('204').redirect(req.form.redirectSuccess)
   }).catch((err) => {
     console.log(err)
-    res.status('200').redirect(req.redirectFailure)
+    return res.status('200').redirect(req.form.redirectFailure)
   })
 }
