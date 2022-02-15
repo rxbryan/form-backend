@@ -4,7 +4,7 @@ const multiparty = require('multiparty')
 const db = require('./db')
 
 const env = process.env.NODE_ENV || 'development'
-const {STORE_LOCATION} = require(`../.credentials.${env}`)
+const STORE = process.env.STORE || require(`../.credentials.${env}`).STORE_LOCATION
 
 const storeDir = pathUtils.join(process.cwd(), 'uploads')
 if (!fs.existsSync(storeDir)) fs.mkdirSync(storeDir)
@@ -17,7 +17,7 @@ module.exports = async (req, res, next) => {
   if (!/\bmultipart\/form-data/.test(req.headers['content-type'])){ 
     next()
   } else {
-    let options = (STORE_LOCATION === 'S3') ? {} : {uploadDir: storeDir}
+    let options = (STORE === 'S3') ? {} : {uploadDir: storeDir}
     let form = new multiparty.Form(options)
     form.on('error', err => {
       //console.log('error parsing form ' + err.stack)
