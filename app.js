@@ -26,6 +26,10 @@ app.listen(port, () => {
   console.log('App listening on port 8459')
   console.log(process.cwd())
 })
+process.on('uncaughtException', function (err) {
+  console.error(err.stack); // either logs on console or send to other server via api call.
+  process.exit(1)
+})
 //disable 'x-powered-by header'
 app.disable('x-powered-by')
 app.use(cors())
