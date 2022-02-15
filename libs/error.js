@@ -55,12 +55,15 @@ ApiError.prototype.errorDetails = function errorDetails (options) {
  * Construct Error object.
  */
 ApiError.prototype.constructError = function() {
-  return {
+  let error =  {
     code: this.code,
     target: this.target,
     message: this.message,
     details: this.details
   }
+  if (error.details.length > 0) this.details = []
+
+  return error
 }
 
 ApiError.prototype.dbError = function(options) {
