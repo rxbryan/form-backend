@@ -28,7 +28,8 @@ exports.authenticateFormid = async (req, res, next) => {
   console.log('form: '+form)
   if(!form) {
     console.log('formId not found in db')
-    return res.status('404').json(authError.formIdError()) //error
+    return res.status('401').json(authError.formIdError())
+    //heroku router throws a code=H18 error when we close the connection without fully reading the request body 
   }
   req.form = {
     formId: form.formId,
