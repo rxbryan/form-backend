@@ -3,7 +3,7 @@ const FormData = require('../models/Form-data')
 const Form = require('../models/Form')
 //const utils = require('./util')
 
-//const env = process.env.NODE_ENV || 'development' //to-do: remove this later
+const env = process.env.NODE_ENV || 'development' //to-do: remove this later
 
 try {
   var connectionString = process.env.MONGODB_CONNECT //|| require(`../.credentials.${env}`).mongodb.connectionString
