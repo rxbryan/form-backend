@@ -43,7 +43,7 @@ const requestError = new apiError()
 		db.storeForm(form).then(() => {
 			res.status('201').set('Location', req.headers['host']+`/forms/submit/${form.formId}`).json({
 				formId: form.formId,
-				action: `Your hostname/forms/submit/${form.formId}`
+				action: `${req.headers['host']}/forms/submit/${form.formId}`
 			})
 		}).catch(error => {
 				res.status('200').json(requestError.dbError(

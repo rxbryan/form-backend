@@ -25,23 +25,21 @@ exports.authenticateFormid = async (req, res, next) => {
   const authError = new createError()
   let formId = req.params.formId || req.query.formId
   let form = await Form.findOne({'formId': formId}).catch(err => console.log(err))
-  console.log('form: ')
-  console.log(form)
-  if(form) {
-    req.form = {
-      formId: form.formId,
-      status: form.status,
-      fileUpload: form.fileUpload,
-      redirectFailure: form.redirectUrl.failure,
-      redirectSuccess: form.redirectUrl.success
-    }
-    req.formId = form.formId
-    req.redirectFailure = form.redirectUrl.failure
-    req.redirectSuccess = form.redirectUrl.success
-
-    next()
-  } else {
+  console.log('form: '+form)
+  if(!form) {
     console.log('formId not found in db')
-    return res.status('404').json(authError.formIdError()) //error
+    res.status('404').json(authError.formIdError()) //error
   }
+  req.form = {
+    formId: form.formId,
+    status: form.status,
+    fileUpload: form.fileUpload,
+    redirectFailure: form.redirectUrl.failure,
+    redirectSuccess: form.redirectUrl.success
+  }
+  req.formId = form.formId
+  req.redirectFailure = form.redirectUrl.failure
+  req.redirectSuccess = form.redirectUrl.success
+
+  next()
 }
