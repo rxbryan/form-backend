@@ -101,8 +101,15 @@ ApiError.prototype.queryParameterError = function () {
   return this.constructError()
 }
 
+ApiError.prototype.badRequestError = function(options) {
+  let opts = options || {}
+  this.message = opts.message || 'request message not properly constructed'
+  this.target = opts.target || ''
+  this.code = errorCode(opts.status||400)
+}
+
 ApiError.prototype.invalidBodyError = function() {
-  this.message = 'invalid entity body parameters'
+  this.message = 'entity body parameters invalid'
   this.target = 'invalidRequest'
   this.code = errorCode(400)
   return this.constructError()
