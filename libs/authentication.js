@@ -42,6 +42,6 @@ exports.authenticateFormid = async (req, res, next) => {
     next()
   } else {
     console.log('formId not found in db')
-    return res.status(404).json(authError.formIdError()) //error
+    return res.status('404').json(authError.formIdError()) //error
   }
 }
