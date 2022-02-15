@@ -1,5 +1,6 @@
 const Form = require('../models/Form')
 const utils = require('./util')
+const createError = require('./error')
 
 exports.authenticateJWS = async (req, res, next) => {
   const jws = req.headers['jwt'] || req.body && req.body.token || undefined
@@ -21,8 +22,9 @@ exports.authenticateJWS = async (req, res, next) => {
 }
 
 exports.authenticateFormid = async (req, res, next) => {
+  const authError = new createError()
   let formId = req.params.formId || req.query.formId
-  let form = await Form.findOne({'formId': formId}).catch(err => {res.redirect('/404')})
+  let form = await Form.findOne({'formId': formId}).catch(err => console.log(err))
   console.log('form: ')
   console.log(form)
   if(form) {
@@ -40,6 +42,6 @@ exports.authenticateFormid = async (req, res, next) => {
     next()
   } else {
     console.log('formId not found in db')
-    return res.type('text/plain').status(404).send('404 not found') //error
+    return res.status(404).json(authError.formIdError()) //error
   }
 }

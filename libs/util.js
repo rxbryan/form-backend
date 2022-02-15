@@ -5,6 +5,7 @@ const jws = require('jws')
 
 try {
   var JWS_SECRET = process.env.JWS_SECRET //|| require(`../.credentials.${env}`).JWS_SECRET
+  console.log(JWS_SECRET)
   if (!JWS_SECRET) {
     console.log('JWS_SECRET config var undefined')
     process.exit(1)
