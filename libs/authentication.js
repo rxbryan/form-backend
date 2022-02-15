@@ -17,18 +17,18 @@ exports.authenticateJWS = async (req, res, next) => {
     let error = {
       message: 'request does not contain any authencation'
     }
-    res.status('400').json(error)
+    return res.status('400').json(error)
   }
 }
 
 exports.authenticateFormid = async (req, res, next) => {
   const authError = new createError()
-  let formId = req.params.formId || req.query.formId
+  let formId = req.params.formId || req.query.formId || undefined
   let form = await Form.findOne({'formId': formId}).catch(err => console.log(err))
   console.log('form: '+form)
   if(!form) {
     console.log('formId not found in db')
-    res.status('404').json(authError.formIdError()) //error
+    return res.status('404').json(authError.formIdError()) //error
   }
   req.form = {
     formId: form.formId,
