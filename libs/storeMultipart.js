@@ -4,7 +4,12 @@ const multiparty = require('multiparty')
 const db = require('./db')
 
 const env = process.env.NODE_ENV || 'development'
-const STORE = process.env.STORE || require(`../.credentials.${env}`).STORE_LOCATION
+const STORE = process.env.STORE //|| require(`../.credentials.${env}`).STORE_LOCATION
+
+if (!STORE) {
+  console.log('STORE var undefined')
+  process.exit(1)
+}
 
 const storeDir = pathUtils.join(process.cwd(), 'uploads')
 if (!fs.existsSync(storeDir)) fs.mkdirSync(storeDir)
