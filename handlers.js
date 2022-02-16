@@ -5,7 +5,7 @@ exports.notFound = (req, res) => {
 
 /* eslint-disable no-unused-vars */
 exports.serverError = (err, req, res, next) => {
-  console.error(err)
+  console.error(err.stack)
   res.status('500').json({message: 'server error'})
 }
 /* eslint-enable no-unused-vars */

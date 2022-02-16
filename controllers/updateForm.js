@@ -5,18 +5,22 @@ module.exports = (req, res, next) => {
 	let form = Object.create(null)
 	const fields = ['redirectSuccess', 'redirectFailure', 'fileUpload', 'status']
 
-	if (Object.keys(req.body).length > 4) 
-		return res.status('400').json(createError.errorDetails({message: 'patch request body contains extra entities'}).badRequestError({}))
-
 	let keys = Object.keys(req.body)
-	for (let key in keys){ //needlessly complicated code
-		for (let field in fields) {
-			if (keys[key] === fields[field]) form[keys[key]] = req.body[keys[key]]
+	for (let key of keys){
+		let match = false
+		for (let field of fields) {
+			if (key === field) {
+				form[key] = req.body[key]
+				match = true
+			}
 		}
+		if (match === false)
+			createError.errorDetails({message: `'${key}' is not a valid parameter`})
 	}
-	//TO-DO check every single parameter
-	if (Object.keys(form).length === 0) 
-		return res.status('400').json(createError.invalidBodyError())
+
+	if (Object.keys(form).length === 0 || createError.errors() > 0) 
+		return res.status('400')
+			.json(createError.badRequestError({message: 'request body contains extra parameters'}))
 
 	db.updateForm(req.params.formId, form).then((form)=> {
 		console.log(`${req.params.formId} successfully updated`)
@@ -27,5 +31,4 @@ module.exports = (req, res, next) => {
 			.errorDetails({message: 'patch request was not stored database'})
 			.dbError({message: err.message || 'DatabaseError'}))
 	})
-
 }
