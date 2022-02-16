@@ -5,19 +5,11 @@ const jws = require('jws')
 
 try {
   var JWS_SECRET = process.env.JWS_SECRET || require(`../.credentials.${env}`).JWS_SECRET
-  console.log(JWS_SECRET)
-  if (!JWS_SECRET) {
-    console.log('JWS_SECRET config var undefined')
-    process.exit(1)
-  }
 } catch (err) {
   console.error('JWS_SECRET not defined')
   process.exit(1)
 }
 
-/*
-*payload is an object of arbitrary key:value pairs
-*/
 function verifyJWS (signature) {
   return jws.verify(signature, 'HS256', JWS_SECRET)
 }

@@ -1,5 +1,5 @@
 exports.notFound = (req, res) => {
-  console.log(req.headers)
+  //console.log(req.headers)
   res.status('404').json({message: '404 not found'})
 }
 

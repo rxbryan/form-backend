@@ -62,6 +62,7 @@ ApiError.prototype.constructError = function() {
     details: this.details
   }
   if (error.details.length > 0) this.details = []
+  else delete error.details
 
   return error
 }
@@ -91,6 +92,13 @@ ApiError.prototype.authenticationError = function(options) {
   return this.constructError()
 }
 
+ApiError.prototype.contentTypeError = function() {
+  this.message = 'content-type header parameter invalid'
+  this.target = 'InvalidHeaderValue'
+  this.code = errorCode(400)
+  return this.constructError()
+}
+
 /**
  * use ApiError#prototype#errorDetails to construct details array
  */
@@ -104,8 +112,9 @@ ApiError.prototype.queryParameterError = function () {
 ApiError.prototype.badRequestError = function(options) {
   let opts = options || {}
   this.message = opts.message || 'request message not properly constructed'
-  this.target = opts.target || ''
+  this.target = opts.target || 'BadRequest'
   this.code = errorCode(opts.status||400)
+  return this.constructError()
 }
 
 ApiError.prototype.invalidBodyError = function() {

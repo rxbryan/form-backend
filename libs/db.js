@@ -6,7 +6,7 @@ const Form = require('../models/Form')
 const env = process.env.NODE_ENV || 'development' //to-do: remove this later
 
 try {
-  var connectionString = process.env.MONGODB_CONNECT //|| require(`../.credentials.${env}`).mongodb.connectionString
+  var connectionString = process.env.MONGODB_CONNECT || require(`../.credentials.${env}`).mongodb.connectionString
 } catch (err) {
   console.error('MongoDB connection string missing')
   process.exit(1)
@@ -32,6 +32,7 @@ db.once('open', () => {
 exports.deleteFormData = deleteFormData
 
 exports.storeFormData = async (formId, fields, files) => {
+  if (Object.keys(fields).length === 0) throw {message: 'nothing to store'}
   const formData = new FormData()
   formData.formId = formId
 

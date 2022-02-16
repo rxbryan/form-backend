@@ -6,6 +6,7 @@ const authError = new createError()
 
 exports.authenticateJWS = async (req, res, next) => {
   const jws = req.headers['jwt'] || req.body && req.body.token || undefined
+  if (req.body) delete req.body.token
   if (jws) {
     if (!utils.verifyJWS(jws)) {
       console.log('request does not contain any authentication')
@@ -34,9 +35,5 @@ exports.authenticateFormid = async (req, res, next) => {
     redirectFailure: form.redirectUrl.failure,
     redirectSuccess: form.redirectUrl.success
   }
-  req.formId = form.formId
-  req.redirectFailure = form.redirectUrl.failure
-  req.redirectSuccess = form.redirectUrl.success
-
   next()
 }
