@@ -1,22 +1,19 @@
 const Form = require('../models/Form')
 const utils = require('./util')
-const createError = require('./error')
+const authError = require('./error')()
 
-const authError = new createError()
+exports.authenticateJWS = (req, res, next) => {
+  const JWS = req.headers['jwt'] || req.body && req.body.access_token || undefined
+  let options = JWS ? {} : {target: 'NoAUTH'}
 
-exports.authenticateJWS = async (req, res, next) => {
-  const jws = req.headers['jwt'] || req.body && req.body.token || undefined
-  if (req.body) delete req.body.token
-  if (jws) {
-    if (!utils.verifyJWS(jws)) {
-      console.log('request does not contain any authentication')
-      return res.status('403').json(authError.authenticationError())
-    }
-    req.JWT = jws
-    next()
-  } else {
-    return res.status('403').json(authError.authenticationError({target: 'NoAUTH'}))
+  if (!utils.verifyJWS(JWS)) {
+    console.log('request does not contain any authentication')
+    return res.status('403').json(authError.authenticationError(options))
   }
+
+  if (req.body) delete req.body.access_token
+  req.JWT = JWS
+  next()
 }
 
 exports.authenticateFormid = async (req, res, next) => {
