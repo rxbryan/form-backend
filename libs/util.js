@@ -11,6 +11,7 @@ try {
 }
 
 function verifyJWS (signature) {
+  if (!signature) return false
   return jws.verify(signature, 'HS256', JWS_SECRET)
 }
 
