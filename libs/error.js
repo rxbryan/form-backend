@@ -11,6 +11,21 @@ function ApiError (options) {
   this.code = errorCode(opts.status)
 }
 
+ApiError.prototype.routes = [
+  {
+    PATH_REGEX: /^\/forms$/,
+    methods: ['GET', 'POST', 'DELETE']
+  },
+  {
+    PATH_REGEX: /^\/forms\/\w{22}$/,
+    methods: ['GET', 'PATCH', 'DELETE']
+  },
+  {
+    PATH_REGEX: /^\/form\/submit\/\w{22}$/,
+    methods: ['POST']
+  }
+]
+
 function errorCode (status) {
   let code 
   switch(status) {
@@ -25,6 +40,9 @@ function errorCode (status) {
     break
   case 404:
     code = 'NotFound'
+    break
+  case 405:
+    code = 'MethodNotAllowed'
     break
   case 500:
     code = 'InternalServerError'
@@ -72,7 +90,7 @@ ApiError.prototype.dbError = function(options) {
   if (!opts.message) throw 'error message required to construct error object'
   this.message = opts.message
   this.target = opts.target || 'DatabaseError'
-  this.code = errorCode(opts.status)
+  this.code = errorCode(500||opts.status)
   return this.constructError()
 }
 
@@ -138,6 +156,13 @@ ApiError.prototype.resourceError = function() {
   return this.constructError
 }
 
+ApiError.prototype.methodNotAllowed = function () {
+  this.message = 'requested method not allowed'
+  this.target = 'invalidMethod'
+  this.code = errorCode(405)
+  return this.constructError() 
+}
+
 ApiError.prototype.serverError = function() {
   this.message = 'server unable to complete request'
   this.target = 'serverError'
@@ -148,3 +173,4 @@ ApiError.prototype.serverError = function() {
 ApiError.prototype.errors = function() {
   return this.details.length
 }
+
