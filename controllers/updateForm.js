@@ -24,10 +24,10 @@ module.exports = (req, res, next) => {
 
 	db.updateForm(req.params.formId, form).then((form)=> {
 		console.log(`${req.params.formId} successfully updated`)
-		res.status('204').json(form)
+		res.status('204').end()
 	}).catch (err => {
 		console.log(err)
-		return res.status('200').json(createError
+		return res.status('500').json(createError
 			.errorDetails({message: 'patch request was not stored database'})
 			.dbError({message: err.message || 'DatabaseError'}))
 	})
