@@ -1,16 +1,8 @@
 const mongoose = require('mongoose')
 const FormData = require('../models/Form-data')
 const Form = require('../models/Form')
-//const utils = require('./util')
 
-const env = process.env.NODE_ENV || 'development' //to-do: remove this later
-
-try {
-  var connectionString = process.env.MONGODB_CONNECT || require(`../.credentials.${env}`).mongodb.connectionString
-} catch (err) {
-  console.error('MongoDB connection string missing')
-  process.exit(1)
-}
+var connectionString = process.env.MONGODB_URI
 
 if (!connectionString){
   console.error('MongoDB connection string missing')
@@ -135,6 +127,7 @@ exports.updateForm = async (formId, data) => {
   })
   let status = await form.save().catch()
   if (status.errors) throw status
+  else return form
 }
 
 async function deleteFormData(formId, from, to) {
