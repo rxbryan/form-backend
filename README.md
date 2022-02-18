@@ -6,13 +6,13 @@ Self-hosted Node.js form backend for static sites
 ## Api
 ```
 GET /forms
-jwt: access_token
+jws: access_token
 ```
 returns a list of all formIds as JSON 
 
 ```
 GET /forms/{formId}
-jwt: access_token
+jws: access_token
 ```
 accepts the query parameters:
 - from: start date in the format `yyyy-mm-dd`
@@ -28,7 +28,7 @@ The access token can be passed in the form body `token=value` or as a header par
 
 The following parameters should be passed either as a JSON or form body of the request
 
-- token: access_token
+- access_token: access_token
 - redirectUrlSuccess: redirect url on successful submission
 - redirectUrlFailure: redirect url if an error occurs
 - fileUpload: boolean `true` or `false`. defaults to `false`
@@ -46,7 +46,7 @@ Update form options provided when form was created. Returns form object on succe
 
 ```
 DELETE /forms/{formId}
-jwt: access_token
+jws: access_token
 ```
 Delete submitted forms
 accepts the query parameters:
@@ -55,7 +55,7 @@ accepts the query parameters:
 
 ```
 DELETE /forms
-jwt: access_token
+jws: access_token
 ```
 accepts the query parameter: formId={formId} of form to be deleted
 Delete form
@@ -80,7 +80,7 @@ The mongodb connection string can be placed in `.credential.${env}.json`
   }
 }
 ```
-or as the environment variable `MONGODB_CONNECT`
+or as the environment variable `MONGODB_URI`
 
 **Note** the `env` variable is the value of `process.env.NODE_ENV`  or `development`
 
