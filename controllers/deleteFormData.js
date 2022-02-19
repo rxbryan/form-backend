@@ -19,10 +19,10 @@ module.exports = (req, res, next) => {
 
 	if (queryError.errors() > 0) return res.status('400').json(queryError.queryParameterError())
 
-	db.deleteFormData(req.formId, req.query.from, req.query.to).then(count => {
+	db.deleteFormData(req.form.formId, req.query.from, req.query.to).then(count => {
 		res.status('200').json({message: `${count} form submissions deleted`})
 	}).catch(err => {
 		console.log(err)
-		res.status('200').json(queryError.dbError({message: err.message || 'an error occurred in db.deleteFormData'}))
+		res.status('500').json(queryError.dbError({message: err.message || 'an error occurred in db.deleteFormData'}))
 	})
 }

@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 const FormData = require('../models/Form-data')
 const Form = require('../models/Form')
+const fs = require('fs')
 
 var connectionString = process.env.MONGODB_URI
 
@@ -133,7 +134,7 @@ exports.updateForm = async (formId, data) => {
 async function deleteFormData(formId, from, to) {
   const formData = await FormData.find({formId: formId}).catch(err => {
     console.log(err)
-  }) 
+  })
   if (formData.length === 0) throw {message: 'FormData not found'}
 
   let startdate = (from) ? new Date(from).getTime() : 0
@@ -142,6 +143,17 @@ async function deleteFormData(formId, from, to) {
   let count = 0
   for (let i in formData) {
     if ((formData[i].dateSubmitted.getTime() >= startdate) && (formData[i].dateSubmitted.getTime() <= enddate)) {
+      formData[i].files.forEach(arr => {
+        if (fs.existsSync(arr.filePath)) {
+          try {
+            fs.unlinkSync(arr.filePath)
+            console.log(`deleted ${arr.filePath}`)
+          } catch (err) {
+            throw err
+          }
+        }
+      })
+      
       await formData[i].remove().catch(err => {
         console.log(err)
       })//handle error
