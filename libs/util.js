@@ -1,11 +1,7 @@
 const jws = require('jws')
 
-//const env = process.env.NODE_ENV || 'development'
-
-
-try {
-  var JWS_SECRET = process.env.JWS_SECRET || require(`../.credentials.${env}`).JWS_SECRET
-} catch (err) {
+let JWS_SECRET = process.env.JWS_SECRET
+if  (!JWS_SECRET) {
   console.error('JWS_SECRET not defined')
   process.exit(1)
 }

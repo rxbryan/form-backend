@@ -3,8 +3,7 @@ const pathUtils = require('path')
 const multiparty = require('multiparty')
 const db = require('./db')
 
-const env = process.env.NODE_ENV || 'development'
-const STORE = process.env.STORE || require(`../.credentials.${env}`).STORE_LOCATION
+const STORE = process.env.STORE
 
 if (!STORE) {
   console.log('STORE var undefined')
@@ -17,7 +16,6 @@ if (!fs.existsSync(storeDir)) fs.mkdirSync(storeDir)
 const MULTIPART_CONTENT_TYPE_REGEX = /\bmultipart\/form-data/
 
 module.exports = async (req, res, next) => {
-
   if (!MULTIPART_CONTENT_TYPE_REGEX.test(req.headers['content-type'])){
     console.log('content-type not multipart/form-data')
     return next()
