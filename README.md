@@ -62,13 +62,34 @@ Delete form
 
 ### JWS
 A JSON web signature is required to authenticate request to all the endpoints except the form action. 
-For local development the `SECRET` can be placed in a  JSON file named `.credentials.${env}.json`
-``` json
-{
-  "JWS_SECRET": ""
-}
+The `secret` should be stored in environment variables 
+
+```bash
+JWS_SECRET={secret}
 ```
-or use environment variables `JWS_SECRET = "secret"`
+For Heroku:
+```bash
+heroku config:set --app appname JWS_SECRET={secret}
+```
+**Note** replace {secret} with your secret
+
+Generate new JWS
+```js
+const jws = require('jws')
+const SECRET = process.env.JWS_SECRET
+
+const signature = jws.sign({
+  header : {alg: 'HS256'},
+  payload: {
+    UserId: "signup",
+    scope: "register user",
+    date: new Date().getTime()
+  },
+  secret: SECRET
+})
+
+console.log(signature)
+```
 
 ### Mongodb
 The formData, form profile, logs are stored in either a local or remote mongodb database.
