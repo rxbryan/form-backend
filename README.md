@@ -93,15 +93,7 @@ console.log(signature)
 
 ### Mongodb
 The formData, form profile, logs are stored in either a local or remote mongodb database.
-The mongodb connection string can be placed in `.credential.${env}.json`
-```json
-{
-  "mongodb": {
-    "connectionString": ""
-  }
-}
-```
-or as the environment variable `MONGODB_URI`
+The mongodb connection string should be stored in the environment variable `MONGODB_URI`
 
 **Note** the `env` variable is the value of `process.env.NODE_ENV`  or `development`
 
