@@ -7,7 +7,7 @@ exports.authenticateJWS = (req, res, next) => {
   let options = JWS ? {} : {target: 'NoAUTH'}
 
   if (!utils.verifyJWS(JWS)) {
-    console.log('request does not contain any authentication')
+    console.log('request could not be authenticated')
     return res.status('403').json(authError.authenticationError(options))
   }
 
