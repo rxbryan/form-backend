@@ -7,6 +7,9 @@ module.exports = async (req, res, next) => {
     res.status('200')
     .json({message: `returning Page: ${req.dbQuery.page}. Limit: ${req.dbQuery.limit}`, forms: data})
   }).catch(err => {
-    res.status('200').json(createError.dbError({message: err.message || 'an error occurred in db.getAllForms'}))
+    res.status('200').json(createError.dbError({
+      status: 400,
+      message: err.message || 'an error occurred in db.getAllForms'
+    }))
   })
 }
