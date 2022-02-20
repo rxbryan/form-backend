@@ -6,31 +6,23 @@ if  (!JWS_SECRET) {
   process.exit(1)
 }
 
-function verifyJWS (signature) {
-  if (!signature) return false
-  return jws.verify(signature, 'HS256', JWS_SECRET)
+function checkDate(date, expires) {
+  if (date+(expires*60*60*1000) < new Date().getTime())
+    throw 'JWS is expired'
 }
 
-exports.verifyJWS = verifyJWS
-
-exports.createJWS = (payload) => {
-  const signature = jws.sign({
-    header: {alg: 'HS256'},
-    payload: payload,
-    secret: JWS_SECRET
-  })
-  return signature
-}
-
-exports.decodeJWS = async (signature) => {
-  console.log('signature: '+ signature)
+exports.verifyJWS = async (signature) => {
   if (!signature || signature.length === 0)
     throw {message: 'JWS: cannot verify signature of nothing'}
 
-  if (!verifyJWS(signature)) throw {message: 'JWS signature could not be verified'}
+  if (!jws.verify(signature, 'HS256', JWS_SECRET)) throw {message: 'JWS signature could not be verified'}
 
   let dump = jws.decode(signature)
-  return dump.payload
+  let payload = JSON.parse(dump.payload)
+  if (payload.date && isFinite(parseInt(payload.expires))) {
+    checkDate(payload.date, payload.expires)
+  }
+  return payload
 }
 
 function randomstringv2(len, an) { // an optional string 'a' alpha or 'n' numeric

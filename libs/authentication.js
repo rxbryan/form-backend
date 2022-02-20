@@ -6,14 +6,17 @@ exports.authenticateJWS = (req, res, next) => {
   const JWS = req.headers['jwt'] || req.body && req.body.access_token || undefined
   let options = JWS ? {} : {target: 'NoAUTH'}
 
-  if (!utils.verifyJWS(JWS)) {
+  utils.verifyJWS(JWS).then(()=>{
+    if (req.body) delete req.body.access_token
+    req.JWT = JWS
+    next()
+  }).catch(err => {
     console.log('request could not be authenticated')
+    console.error(err)
     return res.status('403').json(authError.authenticationError(options))
-  }
+  })
 
-  if (req.body) delete req.body.access_token
-  req.JWT = JWS
-  next()
+
 }
 
 exports.authenticateFormid = async (req, res, next) => {

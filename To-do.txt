@@ -1,8 +1,6 @@
 Features:
 	Database encrytion
-	logging 
+	logging
 	add support for remote storage eg. S3...
-	better implement token authentication
 	use collection+json as hypermedia
 	implement statistics for form submits
-	add support for removing files on formData deletions
