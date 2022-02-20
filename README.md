@@ -83,7 +83,7 @@ const signature = jws.sign({
   payload: {
     UserId: "signup",
     scope: "register user",
-    date: new Date().getTime()
+    date: new Date().getTime(),
     expires: 720 //1 month in hrs
   },
   secret: SECRET
