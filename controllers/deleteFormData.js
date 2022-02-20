@@ -23,6 +23,9 @@ module.exports = (req, res, next) => {
 		res.status('200').json({message: `${count} form submissions deleted`})
 	}).catch(err => {
 		console.log(err)
-		res.status('500').json(queryError.dbError({message: err.message || 'an error occurred in db.deleteFormData'}))
+		res.status('200').json(queryError.dbError({
+			status: 400,
+			message: err.message || 'an error occurred in db.deleteFormData'
+		}))
 	})
 }

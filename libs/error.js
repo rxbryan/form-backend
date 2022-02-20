@@ -90,7 +90,7 @@ ApiError.prototype.dbError = function(options) {
   if (!opts.message) throw 'error message required to construct error object'
   this.message = opts.message
   this.target = opts.target || 'DatabaseError'
-  this.code = errorCode(500||opts.status)
+  this.code = errorCode(opts.status||500)
   return this.constructError()
 }
 

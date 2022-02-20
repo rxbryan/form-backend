@@ -135,7 +135,7 @@ async function deleteFormData(formId, from, to) {
   const formData = await FormData.find({formId: formId}).catch(err => {
     console.log(err)
   })
-  if (formData.length === 0) throw {message: 'FormData not found'}
+  if (formData.length === 0) throw {message: 'nothing to delete'}
 
   let startdate = (from) ? new Date(from).getTime() : 0
   let enddate = (to) ? new Date(to).getTime() : new Date().getTime()
