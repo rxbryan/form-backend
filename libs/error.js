@@ -166,7 +166,7 @@ ApiError.prototype.methodNotAllowed = function () {
 ApiError.prototype.serverError = function() {
   this.message = 'server unable to complete request'
   this.target = 'serverError'
-  this.errorCode(500)
+  this.code = errorCode(500)
   return this.constructError()
 }
 
