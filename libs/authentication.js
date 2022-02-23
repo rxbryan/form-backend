@@ -15,8 +15,6 @@ exports.authenticateJWS = (req, res, next) => {
     console.error(err)
     return res.status('403').json(authError.authenticationError(options))
   })
-
-
 }
 
 exports.authenticateFormid = async (req, res, next) => {
