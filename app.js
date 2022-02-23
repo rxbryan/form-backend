@@ -1,6 +1,5 @@
 'using strict'
 const express = require('express')
-const bodyParser = require('body-parser')
 const cors = require('cors')
 const handlers = require('./handlers')
 const auth = require('./libs/authentication')
@@ -35,16 +34,21 @@ app.listen(port, () => {
 app.disable('x-powered-by')
 app.use(cors())
 
+app.param('formId' ,auth.authenticateFormid)
+const forms = app.route('/forms')
+
 //route handling
-app.get('/forms', auth.authenticateJWS, parseQuery, getForms)
-app.get('/forms/:formId', auth.authenticateFormid, auth.authenticateJWS, parseQuery, getFormData)
-app.post('/forms', bodyParser.json(), auth.authenticateJWS, createForm)
-app.post('/form/submit/:formId', auth.authenticateFormid, submitController, multipart, 
-  bodyParser.urlencoded({ extended: true }), bodyParser.json(), storeBody)
-app.patch('/forms/:formId', auth.authenticateFormid, bodyParser.urlencoded({ extended: true }),
-  bodyParser.json(), auth.authenticateJWS, updateForm)
-app.delete('/forms/:formId', auth.authenticateJWS, auth.authenticateFormid, deleteFormData)
-app.delete('/forms', auth.authenticateJWS, auth.authenticateFormid, deleteForms)
+forms.get(auth.authenticateJWS, parseQuery, getForms)
+forms.post(express.json(), auth.authenticateJWS, createForm)
+forms.delete(auth.authenticateFormid, auth.authenticateJWS, deleteForms)
+
+app.get('/forms/:formId', auth.authenticateJWS, parseQuery, getFormData)
+app.patch('/forms/:formId', express.urlencoded({ extended: true }),
+  express.json(), auth.authenticateJWS, updateForm)
+app.delete('/forms/:formId', auth.authenticateJWS, deleteFormData)
+
+app.post('/form/submit/:formId', submitController, multipart, 
+  express.urlencoded({ extended: true }), express.json(), storeBody)
 
 //error handling
 app.use(handlers.notFound)
