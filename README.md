@@ -1,8 +1,6 @@
 # Form-backend
 Self-hosted Node.js form backend for static sites 
 
-## Description
-
 ## Api
 ```
 GET /forms
@@ -91,12 +89,23 @@ const signature = jws.sign({
 
 console.log(signature)
 ```
-
 ### Mongodb
+
 The formData, form profile, logs are stored in either a local or remote mongodb database.
 The mongodb connection string should be stored in the environment variable `MONGODB_URI`
 
 **Note** the `env` variable is the value of `process.env.NODE_ENV`  or `development`
 
+## Demo
+
+A demo is available here: [https://node-form-backend.herokuapp.com/](https://node-form-backend.herokuapp.com/)
+
+**PS** contact me at my email for an access token
+
+## Author
+
+[Bryan Elee](https://github.com/rxbryan) ([rxbryn@gmail.com](mailto:rxbryn@gmail.com))
+
 ## License
-  form-backend is licensed under the MIT License
+
+[MIT License](http://www.opensource.org/licenses/mit-license.php)
